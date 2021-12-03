@@ -396,7 +396,7 @@ int initialize_motor(){
 	bcm2835_delay(10);
 	while(spiIn[1] != 0x20){
 		spiComs((DRV8343_IC1 << 8) | DRV8343_IC1_CONTROL);  //Keeps trying to send first register command, in 100ms increments
-		bcm2835_delay(100); 
+		bcm2835_delay(5); 
 		spi_timeout_counter ++;
 		if(spi_timeout_counter >= 50){
 			return 1;		//Timeout after 5 seconds of trying
