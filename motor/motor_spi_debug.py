@@ -64,51 +64,48 @@ def spi_debug_main():
 
     MC_start.bcm2835_init_spi()     # SPI settings
 
-    GPIO.output(15, 0)  # Disable DRV 8343
-
-    while(message_display("Press '1' to start initialization sequence ", '1') != 1):
-        pass
-
-    try:
-        print("Configuring ADC as GPIO and setting pins LOW...")
-        if not MC_start.C_FUNCTIONS.adc_setlow():       # Set ADC low
-            print("ADC set low successful!")
+    while(1):
+        GPIO.output(15, 0)  # Disable DRV 8343
+        while(message_display("Press '1' to start initialization sequence ", '1') != 1):
             pass
 
-        if input("Would you like to view the registers prior to DRV config? (y/n): ").lower() == 'y':
-            GPIO.output(15, 1)
-            MC_start._read_registers()  # Read all registers
+        try:
+            print("Configuring ADC as GPIO and setting pins LOW...")
+            if not MC_start.C_FUNCTIONS.adc_setlow():       # Set ADC low
+                print("ADC set low successful!")
+                pass
 
-        while(message_display("Press '1' to configure DRV 8343 Registers ", '1') != 1):
-            pass
+            if input("Would you like to view the registers prior to DRV config? (y/n): ").lower() == 'y':
+                GPIO.output(15, 1)
+                MC_start._read_registers()  # Read all registers
 
-        print("Configuring DRV8343 Registers...")
-        GPIO.output(15, 1)  # Enable DRV 8343
+            while(message_display("Press '1' to configure DRV 8343 Registers ", '1') != 1):
+                pass
 
-        _self_check = MC_start.C_FUNCTIONS.initialize_motor()   # Write to DRV Registers
+            print("Configuring DRV8343 Registers...")
+            GPIO.output(15, 1)  # Enable DRV 8343
 
-        if not _self_check:
-            print("Motor Initialized Successfully!\n")
-        else:
-            ## TODO Raise exception here
-            msg = "DRV 8343 Initialization Failed! Terminating Program..."
-            end_sequence(MC_start)
-            return 0
+            _self_check = MC_start.C_FUNCTIONS.initialize_motor()   # Write to DRV Registers
 
-        if input("Would you like to view the registers? (y/n): ").lower() == 'y':
-            MC_start._read_registers()  # Read all registers
-
-            if(input("\nAre Registers correct? (y/n): ").lower() != 'y'):
+            if not _self_check:
+                print("Motor Initialized Successfully!\n")
+            else:
+                ## TODO Raise exception here
+                msg = "DRV 8343 Initialization Failed! Terminating Program..."
                 end_sequence(MC_start)
                 return 0
 
-        return 1
-        
+            if input("Would you like to view the registers? (y/n): ").lower() == 'y':
+                MC_start._read_registers()  # Read all registers
 
-    except KeyboardInterrupt:
-        end_sequence(MC_start)
+                if(input("\nAre Registers correct? (y/n): ").lower() != 'y'):
+                    end_sequence(MC_start)
+                    return 0
+            
+        except KeyboardInterrupt:
+            end_sequence(MC_start)
 
-        return 0
+            return 0
 
 # Runs at end of any test. Kills all operations
 def end_sequence(MC):
