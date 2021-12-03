@@ -48,7 +48,7 @@ class MotorController(object):
 
     # Reads all registers on DRV8343 and prints them
     def _read_registers(self):
-        for i in range(19):
+        for i in range(18):
             reg_data = self.C_FUNCTIONS.motor_register_read(i)
             print('Register {}:'.format(i) + ' {}'.format(hex(reg_data)));
             print('\n')
