@@ -407,7 +407,7 @@ int initialize_motor(){
 	*/
 	for(int i = 0; i < 14; i ++){
 		spiComs((motor_reg_arr[i][0] << 8) | motor_reg_arr[i][1]);
-		bcm2835_delay(0.05);
+		bcm2835_delay(0.075);
 	}
 	return 0x0;
 	//return motor_initialize_check();
