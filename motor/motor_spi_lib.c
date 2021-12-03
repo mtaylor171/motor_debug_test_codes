@@ -421,6 +421,7 @@ int motor_initialize_check(){
 }
 
 uint16_t motor_register_read(int reg){
+	setAD5592Ch(1);
 	spiComs(0x8000 | (reg << 8));
 	return spiIn[1];
 }
