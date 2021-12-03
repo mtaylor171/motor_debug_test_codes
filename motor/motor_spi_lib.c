@@ -391,7 +391,7 @@ int initialize_motor(){
 	int spi_timeout_counter = 0;
 	AD5592_Init();
 	setAD5592Ch(1);
-	bcm2835_delay(10);
+	bcm2835_delay(100);
 	/*
 	spiComs((DRV8343_IC1 << 8) | DRV8343_IC1_CONTROL);
 	bcm2835_delay(1);
@@ -407,7 +407,7 @@ int initialize_motor(){
 	*/
 	for(int i = 0; i < 15; i ++){
 		spiComs((motor_reg_arr[i][0] << 8) | motor_reg_arr[i][1]);
-		//bcm2835_delay(1);
+		bcm2835_delay(0.05);
 	}
 	return 0x0;
 	//return motor_initialize_check();
